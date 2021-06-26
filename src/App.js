@@ -1,55 +1,32 @@
-import React from "react";
-import { useState } from "react";
-import "./css/App.css";
-import ItemList from "./components/items";
+import React, { useState } from 'react'
+import NewTodoForm from './components/new-todo-form'
+import TodoList from './components/todo-list'
+import './css/App.css'
 
 function App() {
-    // store current item
-    const [item, setItem] = useState("");
-    // Store all items
-    const [items, setItems] = useState([]);
-    // store ids
-    const [id, setID] = useState(0);
+	// Store all items
+	const [todos, setTodos] = useState([])
 
-    // Adding when a new item comes along
-    function newItem(newItem) {
-        const obj = {
-            item: newItem,
-            id: id,
-        };
+	// Adding when a new item comes along
+	function addTodo(todo) {
+		const newTodo = {
+			text: todo,
+			id: Date.now()
+		}
 
-        setItems((items) => [...items, obj]);
+		setTodos([...todos, newTodo])
+	}
 
-        setID(id + 1);
-    }
+	function removeTodo(id) {
+		console.log(`Remove todo with the id ${id}`)
+	}
 
-    // when for is submitted
-    function formSubmit(e) {
-        e.preventDefault();
-        newItem(item);
-        setItem("");
-    }
-
-    // update state when changed
-    function itemUpdate(e) {
-        setItem(e.target.value);
-    }
-
-    function callBackRemove() {
-        console.log("Callback in parent worked");
-    }
-
-    return (
-        <div>
-            <form onSubmit={formSubmit}>
-                <input value={item} type="text" onChange={itemUpdate}></input>
-
-                <button>Submit</button>
-            </form>
-
-            <ItemList passedOBJ={{ items, callBackRemove }} />
-        </div>
-    );
+	return (
+		<main>
+			<NewTodoForm addTodo={addTodo} />
+			<TodoList todos={todos} removeTodo={removeTodo} />
+		</main>
+	)
 }
 
-export default App;
+export default App
